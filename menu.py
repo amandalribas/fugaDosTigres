@@ -20,23 +20,23 @@ carrinhoLimpeza = Sprite("images/carrinholimpeza.png")
 policial = Sprite("images/policial.png")
 moeda = Sprite("images/coin.png")
 janela.set_title("FASE 1: PRISÃO")
-moedas = 14
+moedas = 0
 
-posInicialPersonagem(personagem1)
-#posInicialPersonagem(personagem2)
+#posInicialPersonagem(personagem1)
+posInicialPersonagem(personagem2)
 while True:
     #posicioes Iniciais:
-    #obstaculoInicial(policial)
-    obstaculoInicial(carrinhoLimpeza)
+    obstaculoInicial(policial)
+    #obstaculoInicial(carrinhoLimpeza)
     personagem1.move_key_y(0.5)
-    moeda.set_position(30,35)
+    moeda.set_position(55,35)
 
     background.draw()
     
-    personagem1.draw()
-    carrinhoLimpeza.draw()
-    #personagem2.draw()
-    #policial.draw()
+    #personagem1.draw()
+    #carrinhoLimpeza.draw()
+    personagem2.draw()
+    policial.draw()
     texto = custom_font.render(str(moedas), True, (255,251,100))
     janela.screen.blit(texto, (130, 50)) 
     moeda.draw()
