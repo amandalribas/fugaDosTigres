@@ -1,0 +1,65 @@
+'''
+        if obstaculo.x < -(obstaculo.width) and policial:
+            config.obstaculoEscolhido == "assets/sprites/carrinholimpeza.png"
+            obstaculo.set_position(janela.width,490)
+            carrinho = True
+            policial = False
+
+        if obstaculo.x + obstaculoCopia.width <= 0:
+            obstaculo.x = obstaculoCopia.x + obstaculoCopia.width
+        if obstaculo.x + obstaculoCopia.width <= 0:
+            obstaculoCopia.x = obstaculo.x + obstaculo.width'''
+
+'''from PPlay.window import *
+from PPlay.gameimage import *
+from PPlay.keyboard import Keyboard
+from PPlay.sprite import  *
+
+janela = Window(800, 533)
+
+bg1=GameImage("images//background_prisao.jpg")
+bg2=GameImage("images//background_prisao.jpg")
+player=Sprite("images//player.png")
+carrinho=Sprite("images//carrinholimpeza.jpg")
+
+#posiciona o player na posição fixa
+player.x=30
+player.y=533-player.height-15
+
+#posiciona o carrinho só pra um primeiro teste
+carrinho.x= 730
+carrinho.y = player.y
+
+#coloca o primeiro fundo cobrindo toda a janela
+bg1.x=0
+bg1.y=0
+
+#coloca o segundo fundo ao lado para servir de apoio na movimentação
+bg2.x= bg1.width
+bg2.y=0
+
+vel=150
+
+teclado=Keyboard()
+
+while True:
+    janela.update()
+
+    #movimenta ambos para a esquerda
+    bg1.x-= vel*janela.delta_time()
+    bg2.x-= vel*janela.delta_time()
+    carrinho.x-= vel*janela.delta_time()
+
+    #vai fazendo a movimentação "circular"
+    if bg1.x + bg1.width <= 0:
+        bg1.x = bg2.x + bg2.width
+    if bg2.x + bg2.width <= 0:
+        bg2.x = bg1.x + bg1.width
+
+
+    bg1.draw()
+    bg2.draw()
+    carrinho.draw()
+    player.draw()
+
+    janela.update()'''
