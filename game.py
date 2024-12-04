@@ -2,12 +2,12 @@ from PPlay.window import *
 from PPlay.gameimage import *
 from PPlay.sprite import *
 import config
+import random
+
 
 #fonte
 pygame.font.init()
 custom_font = pygame.font.Font("fonts/PressStart2P-Regular.ttf", 32)
-
-
 
 def game():
     janela = Window(1024,682)
@@ -15,20 +15,25 @@ def game():
     background = GameImage("assets/sprites/background_prisao.png")
     background2 = GameImage("assets/sprites/background_prisao.png")
     personagem = Sprite(str(config.personagemEscolhido))
-    obstaculo = Sprite(str(config.obstaculoEscolhido))
-    obstaculoCopia = Sprite(str(config.obstaculoEscolhido))
+    
+    moedaJogo = Sprite("assets/sprites/coinG.png")
+    personagem.set_position(110,470)
 
-    #carrinhoLimpeza = Sprite("assets/sprites/carrinholimpeza.png")
-    #policial = Sprite("assets/sprites/policial.png")
+    listaObstaculos = ["assets/sprites/carrinholimpeza.png", "assets/sprites/policial.png", "assets/sprites/mesa.png", "assets/sprites/bala.png"]
+    posicoesObstaculos = [personagem.y + 15, personagem.y + 15, personagem.y + 100, personagem.y + 35]
+    atual = random.randint(0,(len(listaObstaculos)-1))
+    obstaculo = Sprite(str(listaObstaculos[atual]))
+    obstaculo.set_position(janela.width,posicoesObstaculos[atual])
+    
     moeda = Sprite("assets/sprites/coin.png")
     janela.set_title("FASE 1: PRISÃO")
-    moedas = 0
-    velBackground =250
     
-    personagem.set_position(110,470)
+    moedas = 0
+    velBackground =350
+    
     moeda.set_position(55,35)
-    obstaculo.set_position(janela.width,personagem.y + 30)
-
+    
+    contLooping = 0
     #manipulando backgrounds
     #coloca o primeiro fundo cobrindo toda a janela
     background.x=0
@@ -37,6 +42,8 @@ def game():
     background2.x= background.width
     background2.y=0
 
+
+    moedaJogo.set_position(janela.width + obstaculo.width/2,personagem.y - 180)
     while True:
         #posicioes Iniciais:
         #obstaculoInicial(carrinhoLimpeza)
@@ -51,9 +58,23 @@ def game():
             background.x = background2.x + background2.width
         if background2.x + background2.width <= 0:
             background2.x = background.x + background.width
+            
         #repete o obstaculo
         if obstaculo.x < -(obstaculo.width):
-            obstaculo.set_position(janela.width,personagem.y + 30)
+            atual = random.randint(0,(len(listaObstaculos)-1))
+            obstaculo = Sprite(str(listaObstaculos[atual]))
+            obstaculo.set_position(janela.width,posicoesObstaculos[atual])
+            contLooping += 1
+        #moeda aparecendo
+        
+        moedaJogo.hide()
+        if contLooping == 2:
+            moedaJogo.unhide()
+            moedaJogo.x-= velBackground*janela.delta_time()
+            if moedaJogo.x < moedaJogo.width:
+                moedaJogo.set_position(janela.width + obstaculo.width/2,personagem.y - 180)
+                contLooping = 0
+
 
         #carrinhoLimpeza.draw()
         background.draw()
@@ -64,6 +85,7 @@ def game():
         texto = custom_font.render(str(moedas), True, (255,251,100))
         janela.screen.blit(texto, (130, 50)) 
         moeda.draw()
-
+        moedaJogo.draw()
         janela.update()
 
+game()
