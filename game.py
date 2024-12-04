@@ -7,7 +7,7 @@ import random
 
 #fonte
 pygame.font.init()
-custom_font = pygame.font.Font("fonts/PressStart2P-Regular.ttf", 32)
+custom_font = pygame.font.Font("assets/fonts/PressStart2P-Regular.ttf", 32)
 
 def game():
     janela = Window(1024,682)
