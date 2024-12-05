@@ -42,7 +42,9 @@ def game():
     background2.x= background.width
     background2.y=0
 
-
+    velPulo = 500
+    sobe = False
+    pulo = False
     moedaJogo.set_position(janela.width + obstaculo.width/2,personagem.y - 180)
     while True:
         #posicioes Iniciais:
@@ -75,6 +77,19 @@ def game():
                 moedaJogo.set_position(janela.width + obstaculo.width/2,personagem.y - 180)
                 contLooping = 0
 
+        if not(pulo) and teclado.key_pressed("space"):
+            sobe = True
+            pulo = True
+        if sobe and personagem.y > 200: #personagem sobe até a altura 200
+            personagem.move_y(-velPulo*janela.delta_time()) 
+        if personagem.y == 200: #se atinge a altura limite para de subir
+            sobe = False
+        if not sobe and personagem.y < 470: #se ja atingiu a altura limite, desce, até chegar no chao
+            personagem.move_y(velPulo*janela.delta_time())   
+        if personagem.y == 470: #se está no chão, não está pulando, cooldown 
+            pulo = False
+
+            
 
         #carrinhoLimpeza.draw()
         background.draw()
