@@ -3,5 +3,5 @@ import menu
 
 while True:
     
-    menu.menu()
+    menu.main()
     #game.game()

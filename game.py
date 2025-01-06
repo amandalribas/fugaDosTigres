@@ -4,12 +4,21 @@ from PPlay.sprite import *
 import config
 import random
 
-
 #fonte
 pygame.font.init()
 custom_font = pygame.font.Font("assets/fonts/PressStart2P-Regular.ttf", 32)
 
-def game():
+def gameover():
+    janela = Window(1024,682)
+    teclado = Window.get_keyboard()
+
+    while True:
+        janela.draw_text("GAME-OVER", 335, janela.height/2, size=70, color=(255,0,0), font_name="Arial", bold=False, italic=False)
+        if (teclado.key_pressed("esc")):
+            janela.close()
+        janela.update()
+
+def main():
     janela = Window(1024,682)
     teclado = Window.get_keyboard()
     background = GameImage("assets/sprites/background_prisao.png")
@@ -17,7 +26,8 @@ def game():
     personagem = Sprite(str(config.personagemEscolhido))
     
     moedaJogo = Sprite("assets/sprites/coinG.png")
-    personagem.set_position(110,470)
+    yPersonagemInicial = 470
+    personagem.set_position(110,yPersonagemInicial)
 
     listaObstaculos = ["assets/sprites/carrinholimpeza.png", "assets/sprites/policial.png", "assets/sprites/mesa.png", "assets/sprites/bala.png"]
     posicoesObstaculos = [personagem.y + 15, personagem.y + 15, personagem.y + 100, personagem.y + 35]
@@ -26,26 +36,34 @@ def game():
     obstaculo.set_position(janela.width,posicoesObstaculos[atual])
     
     moeda = Sprite("assets/sprites/coin.png")
+    moeda.set_position(55,35)
+
+    vida = Sprite("assets/sprites/vida.png")
+    vida.set_position(janela.width - 110,35)
+
+
     janela.set_title("FASE 1: PRISÃO")
     
-    moedas = 0
-    velBackground =350
+    contMoedas = 0
+    velBackground = 700
     
-    moeda.set_position(55,35)
     
     contLooping = 0
-    #manipulando backgrounds
+    #MANIPULANDO BACKGROUNDS
     #coloca o primeiro fundo cobrindo toda a janela
     background.x=0
     background.y=0
     #coloca o segundo fundo ao lado para servir de apoio na movimentação
     background2.x= background.width
     background2.y=0
-
+    
+    #PULO
     velPulo = 500
     sobe = False
     pulo = False
+
     moedaJogo.set_position(janela.width + obstaculo.width/2,personagem.y - 180)
+    colidiu = False
     while True:
         #posicioes Iniciais:
         #obstaculoInicial(carrinhoLimpeza)
@@ -67,16 +85,32 @@ def game():
             obstaculo = Sprite(str(listaObstaculos[atual]))
             obstaculo.set_position(janela.width,posicoesObstaculos[atual])
             contLooping += 1
-        #moeda aparecendo
-        
-        moedaJogo.hide()
+
+
+        #MOEDA        
         if contLooping == 2:
-            moedaJogo.unhide()
             moedaJogo.x-= velBackground*janela.delta_time()
             if moedaJogo.x < moedaJogo.width:
-                moedaJogo.set_position(janela.width + obstaculo.width/2,personagem.y - 180)
+                moedaJogo.set_position(janela.width + obstaculo.width/3 + 20, yPersonagemInicial - 180)
                 contLooping = 0
+        if personagem.collided(moedaJogo):
+            moedaJogo.set_position(-500,-500)
+            contMoedas += 1
 
+        #PERSONAGEM PERDENDO VIDAS AO COLIDIR:
+        if personagem.collided(obstaculo):
+            colidindo = True
+            colidiu = True
+        else:
+            colidindo = False
+        if not(colidindo) and colidiu:
+            config.contVidas -= 1
+            colidiu = False
+        if config.contVidas == 0:
+            gameover()
+            print("GAMEOVER")
+
+        #PULO
         if not(pulo) and teclado.key_pressed("space"):
             sobe = True
             pulo = True
@@ -97,10 +131,11 @@ def game():
         personagem.draw()
         obstaculo.draw()
         #policial.draw()
-        texto = custom_font.render(str(moedas), True, (255,251,100))
-        janela.screen.blit(texto, (130, 50)) 
+        textoMoedas = custom_font.render(str(contMoedas), True, (255,251,100))
+        janela.screen.blit(textoMoedas, (130, 50)) 
+        textoVidas = custom_font.render(str(config.contVidas), True, (255,251,100))
+        janela.screen.blit(textoVidas, (janela.width - 160,50))
         moeda.draw()
         moedaJogo.draw()
+        vida.draw()
         janela.update()
-
-game()
