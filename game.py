@@ -19,6 +19,8 @@ def gameover():
         janela.update()
 
 def main():
+    config.contVidas += 1
+
     janela = Window(1024,682)
     teclado = Window.get_keyboard()
     background = GameImage("assets/sprites/background_prisao.png")
@@ -33,7 +35,7 @@ def main():
     posicoesObstaculos = [personagem.y + 15, personagem.y + 15, personagem.y + 100, personagem.y + 35]
     atual = random.randint(0,(len(listaObstaculos)-1))
     obstaculo = Sprite(str(listaObstaculos[atual]))
-    obstaculo.set_position(janela.width,posicoesObstaculos[atual])
+    obstaculo.set_position(janela.width + 300,posicoesObstaculos[atual])
     
     moeda = Sprite("assets/sprites/coin.png")
     moeda.set_position(55,35)
@@ -45,9 +47,7 @@ def main():
     janela.set_title("FASE 1: PRISÃO")
     
     contMoedas = 0
-    velBackground = 700
-    
-    
+        
     contLooping = 0
     #MANIPULANDO BACKGROUNDS
     #coloca o primeiro fundo cobrindo toda a janela
@@ -58,7 +58,6 @@ def main():
     background2.y=0
     
     #PULO
-    velPulo = 500
     sobe = False
     pulo = False
 
@@ -69,9 +68,9 @@ def main():
         #obstaculoInicial(carrinhoLimpeza)
         
         #movimenta ambos para a esquerda
-        background.x-= velBackground*janela.delta_time()
-        background2.x-= velBackground*janela.delta_time()
-        obstaculo.x-= velBackground*janela.delta_time()
+        background.x-= config.velBackground*janela.delta_time()
+        background2.x-= config.velBackground*janela.delta_time()
+        obstaculo.x-= config.velBackground*janela.delta_time()
     
         #vai fazendo a movimentação "circular"
         if background.x + background2.width <= 0:
@@ -89,16 +88,16 @@ def main():
 
         #MOEDA        
         if contLooping == 2:
-            moedaJogo.x-= velBackground*janela.delta_time()
+            moedaJogo.x-= config.velBackground*janela.delta_time()
             if moedaJogo.x < moedaJogo.width:
                 moedaJogo.set_position(janela.width + obstaculo.width/3 + 20, yPersonagemInicial - 180)
                 contLooping = 0
-        if personagem.collided(moedaJogo):
+        if personagem.collided_perfect(moedaJogo):
             moedaJogo.set_position(-500,-500)
             contMoedas += 1
 
         #PERSONAGEM PERDENDO VIDAS AO COLIDIR:
-        if personagem.collided(obstaculo):
+        if personagem.collided_perfect(obstaculo):
             colidindo = True
             colidiu = True
         else:
@@ -108,21 +107,20 @@ def main():
             colidiu = False
         if config.contVidas == 0:
             gameover()
-            print("GAMEOVER")
 
         #PULO
         if not(pulo) and teclado.key_pressed("space"):
             sobe = True
             pulo = True
         if sobe and personagem.y > 200: #personagem sobe até a altura 200
-            personagem.move_y(-velPulo*janela.delta_time()) 
-        if personagem.y == 200: #se atinge a altura limite para de subir
+            personagem.move_y(-config.velPulo*janela.delta_time()) 
+        if 190 <= personagem.y <= 200: #se atinge a altura limite para de subir
             sobe = False
-        if not sobe and personagem.y < 470: #se ja atingiu a altura limite, desce, até chegar no chao
-            personagem.move_y(velPulo*janela.delta_time())   
-        if personagem.y == 470: #se está no chão, não está pulando, cooldown 
+        if not(sobe) and personagem.y < 470: #se ja atingiu a altura limite, desce, até chegar no chao
+            personagem.move_y(config.velPulo*janela.delta_time())   
+        if 470 <= personagem.y <= 480: #se está no chão, não está pulando, cooldown 
             pulo = False
-
+        #print(personagem.y)
             
 
         #carrinhoLimpeza.draw()

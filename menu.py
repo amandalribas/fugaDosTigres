@@ -62,14 +62,21 @@ def dificuldade():
     dificil.set_position(janela.width/2 - dificil.width/2,550)
     mouse = Window.get_mouse()
     while True:
-        if (mouse.is_over_area([janela.width/2 - facil.width/2,150], [janela.width/2 - facil.width/2 + 300,250])) and mouse.is_button_pressed(1): 
-            personagem.escolha()
-        if (mouse.is_over_area([janela.width/2 - facil.width/2,350], [janela.width/2 - medio.width/2 + 300,450])) and mouse.is_button_pressed(1):
-            config.dif_lvl = 2
-            personagem.escolha()
+        if (mouse.is_over_area([janela.width/2 - facil.width/2,150], [janela.width/2 - facil.width/2 + 300,250])) and mouse.is_button_pressed(1):
+            #facil
+            config.contVidas = 5
+            config.velBackground = 500
+            config.velPulo = 450
+            escolha()
+        if (mouse.is_over_area([janela.width/2 - facil.width/2,350], [janela.width/2 - medio.width/2 + 300,450])) and mouse.is_button_pressed(1): 
+            #medio
+            escolha()
         if (mouse.is_over_area([janela.width/2 - facil.width/2,550], [janela.width/2 - dificil.width/2 + 300,650])) and mouse.is_button_pressed(1):
-            config.dif_lvl = 3
-            personagem.escolha()
+            #
+            config.contVidas = 1
+            config.velBackground = 700
+            config.velPulo = 600
+            escolha()
 
         janela.update()
         facil.draw()
