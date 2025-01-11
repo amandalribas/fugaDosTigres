@@ -4,6 +4,12 @@ from PPlay.sprite import *
 import config
 import game
 
+# som
+pygame.mixer.init()
+som = pygame.mixer.Sound("assets/sounds/balada.wav")
+music_channel = pygame.mixer.Channel(0)
+
+music_channel.play(som, loops=-1)
 
 def main():
     janela = Window(1024,682)
@@ -42,9 +48,12 @@ def escolha():
         
         if (mouse.is_over_area([50,janela.height/2 - buttom_p1.height/2], [350,janela.height/2 - buttom_p1.height/2 + 100])) and mouse.is_button_pressed(1):
             config.personagemEscolhido = "assets/sprites/deolene.png"
+            config.personagemAndando = "assets/sprites/deolenerun.png"
+            config.p = 1
             game.main()
         if (mouse.is_over_area([janela.width-50 - buttom_p1.width,janela.height/2 - buttom_p1.height/2], [janela.width-50 - buttom_p1.width + 300,janela.height/2 - buttom_p1.height/2 + 100])) and mouse.is_button_pressed(1):
             config.personagemEscolhido = "assets/sprites/guilherme.png"
+            config.p = 2
             game.main()
         buttom_p1.draw()
         buttom_p2.draw()
