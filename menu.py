@@ -53,6 +53,9 @@ def escolha():
             game.main()
         if (mouse.is_over_area([janela.width-50 - buttom_p1.width,janela.height/2 - buttom_p1.height/2], [janela.width-50 - buttom_p1.width + 300,janela.height/2 - buttom_p1.height/2 + 100])) and mouse.is_button_pressed(1):
             config.personagemEscolhido = "assets/sprites/guilherme.png"
+            config.personagemAndando = "assets/sprites/guilhermerun.png"
+            config.personagemAgachando = "assets/sprites/guilhermedown.png"
+            config.personagemAgachandoAZUL = "assets/sprites/guilhermedownAZUL.png"
             config.p = 2
             game.main()
         buttom_p1.draw()

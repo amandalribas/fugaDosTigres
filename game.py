@@ -34,8 +34,15 @@ def main():
 
     personagemAndando = Sprite(str(config.personagemAndando), 6)
     personagemAndando.set_total_duration(500)
+    personagemAndandoAZUL = Sprite(str(config.personagemAndandoAZUL),6)
+    personagemAndandoAZUL.set_total_duration(500)
+    personagemAndandoAZUL.set_position(110, 470)
+
     personagemAgachando = Sprite(str(config.personagemAgachando),6)
     personagemAgachando.set_total_duration(500)
+    personagemAgachandoAZUL = Sprite(str(config.personagemAgachandoAZUL),6)
+    personagemAgachandoAZUL.set_total_duration(500)
+    personagemAgachandoAZUL.x = 110
 
     personagem = personagemAndando
     moedaJogo = Sprite("assets/sprites/coinG.png")
@@ -178,17 +185,24 @@ def main():
             personagem.move_y(config.velPulo * janela.delta_time())
         if 470 <= personagem.y <= 480: #se está no chão, não está pulando, cooldown
             pulo = False
-
-        #AGACHANDOO ------------------------
         
+        #AGACHANDOO ------------------------
         if not (pulo):
             if teclado.key_pressed("down"):
                 personagemAgachando.set_position(personagem.x,personagem.y)
-                personagem = personagemAgachando
+                agachou = True
+                if invencivel and agachou:
+                    personagem = personagemAgachandoAZUL               
+                elif agachou:
+                    personagem = personagemAgachando
                 personagem.y = yPersonagemInicial + 28
             elif not(invencivel):
                 personagem = personagemAndando
                 personagem.y = yPersonagemInicial
+            elif invencivel:
+                personagem = personagemAndandoAZUL
+        agachou = False
+
         #PONTOS --------------------
         config.pontos += multiPontos
 
