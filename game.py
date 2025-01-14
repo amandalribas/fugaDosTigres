@@ -230,6 +230,7 @@ def main():
             posicoesObstaculos = [yPersonagemInicial + 10, yPersonagemInicial + 50, yPersonagemInicial + 15, yPersonagemInicial - 40]
             background = GameImage("assets/sprites/background_fase2.png")
             background2 = GameImage("assets/sprites/background_fase2_parallax.png")
+            janela.update()
             if config.dif == 1:
                 config.velBackground = 550
             elif config.dif == 2:
