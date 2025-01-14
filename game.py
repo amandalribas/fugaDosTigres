@@ -95,8 +95,8 @@ def main():
     ##
     multiPontos = 0.01
     moedaJogo.set_position(janela.width + obstaculo.width / 2, personagem.y - 180)
-
-
+    obst = 0
+    fase2 = False
     while True:
         # MOVIMENTACAO DO BACKGROUND + OBSTACULO ---------------
         # movimenta ambos para a esquerda
@@ -113,10 +113,15 @@ def main():
         #repete o obstaculo
         if obstaculo.x < -(obstaculo.width):
             atual = random.randint(0, (len(listaObstaculos) - 1))
-            obstaculo = Sprite(str(listaObstaculos[atual]))
+            if fase2 and atual == 3:
+                obstaculo = Sprite(str(listaObstaculos[atual]),8)
+                obstaculo.set_total_duration(500)
+            else:
+                obstaculo = Sprite(str(listaObstaculos[atual]))
             obstaculo.set_position(janela.width, posicoesObstaculos[atual])
             contLooping += 1
             contLoopingEscudo += 1
+            obst = obst + 1
 
         #MOEDA ----------------------
         if (contLooping == 2) and not controle_power_up:
@@ -212,6 +217,19 @@ def main():
         if moedaJogo.x < -moedaJogo.width:  # Moeda saiu da tela
             moedaJogo.set_position(-500, -500)
 
+
+        ########### PROXIMA FASE:::
+        if obst >= 2 or teclado.key_pressed('2'):
+            listaObstaculos = ["assets/sprites/carrinholimpeza.png", "assets/sprites/arbusto.png", "assets/sprites/policial.png", "assets/sprites/bird.png"]
+            fase2 = True
+            print("fase 2")
+            posicoesObstaculos = [yPersonagemInicial + 15, yPersonagemInicial + 50, yPersonagemInicial + 15, yPersonagemInicial - 50]
+            if config.dif == 1:
+                config.velBackground = 550
+            elif config.dif == 2:
+                config.velBackground = 600
+            elif config.dif == 3:
+                config.velBackground = 750
         # UPDATES, TEXTO, DRAW ---------
         background.draw()
         background2.draw()
@@ -229,7 +247,8 @@ def main():
         escudo.draw()
         vida.draw()
         duplica_coins.draw()
-
+        if atual == 3 and fase2:
+            obstaculo.update()
         personagem.update()
         janela.update()
 

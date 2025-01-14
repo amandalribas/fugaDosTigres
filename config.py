@@ -10,3 +10,4 @@ personagemAgachando = "assets/sprites/guilhermedown.png"
 personagemAgachandoAZUL = "assets/sprites/guilhermedownAZUL.png"
 obstaculoEscolhido = "assets/sprites/carrinholimpeza.png"
 p = 0
+dif = 2
