@@ -92,3 +92,41 @@ def gameover():
         buttom_n.draw()
         janela.update()
 
+def win():
+    janela = Window(1024, 682)
+    teclado = Window.get_keyboard()
+    mouse = Window.get_mouse()
+    janela.set_title("VOCE GANHOU!")
+    background = GameImage("assets/sprites/background_venceu.png")
+
+    buttom_sim = GameImage("assets/buttons/buttom_sim.png")
+    buttom_sim.set_position(282,400)
+    buttom_sim_pressed = GameImage("assets/buttons/buttom_sim_pressed.png")
+    buttom_sim_pressed.set_position(282,400)
+    buttom_s = buttom_sim
+
+    buttom_nao = GameImage("assets/buttons/buttom_nao.png")
+    buttom_nao.set_position(582,400)
+    buttom_nao_pressed = GameImage("assets/buttons/buttom_nao_pressed.png")
+    buttom_nao_pressed.set_position(582,400)
+    buttom_n = buttom_nao
+
+    while True:
+        if teclado.key_pressed("esc"):
+            janela.close()
+        if mouse.is_over_area([282,400],[532,500]):
+            buttom_s = buttom_sim_pressed
+            if mouse.is_button_pressed(1):
+                menu.main()
+        else:
+            buttom_s = buttom_sim
+        if mouse.is_over_area([582,400],[732,500]):
+            buttom_n = buttom_nao_pressed
+            if mouse.is_button_pressed(1):
+                janela.close()
+        else:
+            buttom_n = buttom_nao
+        background.draw()
+        buttom_s.draw()
+        buttom_n.draw()
+        janela.update()

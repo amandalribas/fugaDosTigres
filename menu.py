@@ -11,7 +11,11 @@ music_channel = pygame.mixer.Channel(0)
 
 music_channel.play(som, loops=-1)
 
+pygame.font.init()
+custom_font = pygame.font.Font("assets/fonts/PressStart2P-Regular.ttf", 32)
+
 def main():
+    
     janela = Window(1024,682)
     jogar = GameImage("assets/buttons/buttom_jogar.png")
     dif = GameImage("assets/buttons/buttom_dificuldade.png")
@@ -22,7 +26,8 @@ def main():
     dif.set_position(janela.width/2 - jogar.width/2,300)
     sair.set_position(janela.width/2 - jogar.width/2,500)
     while True:
-        
+        janela.set_title("MENU")
+
         janela.set_background_color([0,0,0])
         
         if (mouse.is_over_area([janela.width/2 - jogar.width/2,100], [janela.width/2 - jogar.width/2 + 300,200])) and mouse.is_button_pressed(1):
@@ -46,27 +51,63 @@ def escolha():
     buttom_p2 = GameImage("assets/buttons/buttom_P2.png")
     buttom_p1.set_position(50,janela.height/2 - buttom_p1.height/2)
     buttom_p2.set_position(janela.width-50 - buttom_p1.width ,janela.height/2 - buttom_p1.height/2)
+    background = GameImage("assets/sprites/background_personagem.png")
 
+    deolene1 = Sprite("assets/sprites/deoleneG.png")
+    guilherme1 = Sprite("assets/sprites/guilhermeG.png")
+    deolene1.set_position(150,janela.height/2 - 50)
+    guilherme1.set_position(janela.width-50 - 300 ,janela.height/2 - 50)
+    deolene2 = Sprite("assets/sprites/deolenerunG.png",6)
+    deolene2.set_total_duration(500)
+    deolene2.set_position(150,janela.height/2 - 50)
+    
+    guilherme2 = Sprite("assets/sprites/guilhermerunG.png",6)
+    guilherme2.set_total_duration(500)
+    guilherme2.set_position(janela.width-50 - 300 ,janela.height/2 - 50)
+
+    deolene = deolene1
+    guilherme = guilherme1
     while True:
+        janela.set_title("PERSONAGEM")
+        if mouse.is_over_area([150,janela.height/2 - 50],[335,janela.height/2 + 180]):
+            deolene = deolene2
+            deolene.update()
+            if mouse.is_button_pressed(1):
+                config.personagemEscolhido = "assets/sprites/deolene.png"
+                config.personagemAndando = "assets/sprites/deolenerun.png"
+                config.personagemAndandoAZUL = "assets/sprites/deolenerunAZUL.png"
+                config.personagemAgachando = "assets/sprites/deolenedown.png"
+                config.personagemAgachandoAZUL = "assets/sprites/deoleonedownAZUL.png"
+                config.p = 1
+                game.main()
+        if mouse.is_over_area([janela.width-50 - 300 ,janela.height/2 - 50],[janela.width-50 - 300 +185 ,janela.height/2 - 50 + 230]):
+            guilherme = guilherme2
+            guilherme.update()
+            if mouse.is_button_pressed(1):
+                config.personagemEscolhido = "assets/sprites/guilherme.png"
+                config.personagemAndando = "assets/sprites/guilhermerun.png"
+                config.personagemAndandoAZUL = "assets/sprites/guilhermerunAZUL.png"
+                config.personagemAgachando = "assets/sprites/guilhermedown.png"
+                config.personagemAgachandoAZUL = "assets/sprites/guilhermedownAZUL.png"
+                config.p = 2
+                game.main()
+
         
-        if (mouse.is_over_area([50,janela.height/2 - buttom_p1.height/2], [350,janela.height/2 - buttom_p1.height/2 + 100])) and mouse.is_button_pressed(1):
-            config.personagemEscolhido = "assets/sprites/deolene.png"
-            config.personagemAndando = "assets/sprites/deolenerun.png"
-            config.personagemAndandoAZUL = "assets/sprites/deolenerunAZUL.png"
-            config.personagemAgachando = "assets/sprites/deolenedown.png"
-            config.personagemAgachandoAZUL = "assets/sprites/deoleonedownAZUL.png"
-            config.p = 1
-            game.main()
-        if (mouse.is_over_area([janela.width-50 - buttom_p1.width,janela.height/2 - buttom_p1.height/2], [janela.width-50 - buttom_p1.width + 300,janela.height/2 - buttom_p1.height/2 + 100])) and mouse.is_button_pressed(1):
-            config.personagemEscolhido = "assets/sprites/guilherme.png"
-            config.personagemAndando = "assets/sprites/guilhermerun.png"
-            config.personagemAndandoAZUL = "assets/sprites/guilhermerunAZUL.png"
-            config.personagemAgachando = "assets/sprites/guilhermedown.png"
-            config.personagemAgachandoAZUL = "assets/sprites/guilhermedownAZUL.png"
-            config.p = 2
-            game.main()
-        buttom_p1.draw()
-        buttom_p2.draw()
+        background.draw()
+        deolene.draw()
+        guilherme.draw()
+        #buttom_p1.draw()
+        #buttom_p2.draw()
+
+        nome_deolene1 = custom_font.render("deolene", True, (255, 255, 255))
+        janela.screen.blit(nome_deolene1, (140,535))
+        nome_deolene2 = custom_font.render("bezerro", True, (255, 255, 255))
+        janela.screen.blit(nome_deolene2, (140,575))
+        
+        nome_gui1 = custom_font.render("guilherme", True, (255, 255, 255))
+        janela.screen.blit(nome_gui1, (janela.width-50 - 300 - 20 ,535))
+        nome_gui2 = custom_font.render("lime", True, (255, 255, 255))
+        janela.screen.blit(nome_gui2, (janela.width-50-300 + 55,575))
         janela.update()
 
 
@@ -81,6 +122,8 @@ def dificuldade():
     dificil.set_position(janela.width/2 - dificil.width/2,550)
     mouse = Window.get_mouse()
     while True:
+        janela.set_title("DIFICULDADE")
+
         if (mouse.is_over_area([janela.width/2 - facil.width/2,150], [janela.width/2 - facil.width/2 + 300,250])) and mouse.is_button_pressed(1):
             #facil
             config.pontos = 0

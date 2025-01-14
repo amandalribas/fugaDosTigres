@@ -119,6 +119,9 @@ def main():
             else:
                 obstaculo = Sprite(str(listaObstaculos[atual]))
             obstaculo.set_position(janela.width, posicoesObstaculos[atual])
+            if fase2 and obst == 0:
+                obstaculo = Sprite(str(listaObstaculos[1]))
+                obstaculo.set_position(janela.width, posicoesObstaculos[1])
             contLooping += 1
             contLoopingEscudo += 1
             obst = obst + 1
@@ -181,10 +184,10 @@ def main():
         if not pulo and teclado.key_pressed("up") and not(teclado.key_pressed("down")):
             sobe = True
             pulo = True
-        if sobe and personagem.y > 130:  #personagem sobe até a altura 200
+        if sobe and personagem.y > 110:  #personagem sobe até a altura 200
             personagem.move_y(-config.velPulo * janela.delta_time())
             pulo_channel.play(s_pulo)
-        if 130 <= personagem.y <= 140: #se atinge a altura limite para de subir
+        if 10 <= personagem.y <= 120: #se atinge a altura limite para de subir
             sobe = False
         if not sobe and personagem.y < 470:  #se ja atingiu a altura limite, desce, até chegar no chao
             personagem.move_y(config.velPulo * janela.delta_time())
@@ -219,17 +222,24 @@ def main():
 
 
         ########### PROXIMA FASE:::
-        if obst >= 2 or teclado.key_pressed('2'):
-            listaObstaculos = ["assets/sprites/carrinholimpeza.png", "assets/sprites/arbusto.png", "assets/sprites/policial.png", "assets/sprites/bird.png"]
+        if not(fase2) and (obst > 2 or teclado.key_pressed('2')):
+            listaObstaculos = ["assets/sprites/carro.png", "assets/sprites/Bush_18.png", "assets/sprites/cone.png", "assets/sprites/bird.png"]
             fase2 = True
+            obst = 0
             print("fase 2")
-            posicoesObstaculos = [yPersonagemInicial + 15, yPersonagemInicial + 50, yPersonagemInicial + 15, yPersonagemInicial - 50]
+            posicoesObstaculos = [yPersonagemInicial + 10, yPersonagemInicial + 50, yPersonagemInicial + 15, yPersonagemInicial - 40]
+            background = GameImage("assets/sprites/background_fase2.png")
+            background2 = GameImage("assets/sprites/background_fase2_parallax.png")
             if config.dif == 1:
                 config.velBackground = 550
             elif config.dif == 2:
                 config.velBackground = 600
             elif config.dif == 3:
                 config.velBackground = 750
+
+        if fase2 and (obst > 25 or teclado.key_pressed('3')):
+            utilidades.win()
+
         # UPDATES, TEXTO, DRAW ---------
         background.draw()
         background2.draw()
