@@ -226,10 +226,15 @@ def main():
             listaObstaculos = ["assets/sprites/carro.png", "assets/sprites/Bush_18.png", "assets/sprites/cone.png", "assets/sprites/bird.png"]
             fase2 = True
             obst = 0
-            print("fase 2")
             posicoesObstaculos = [yPersonagemInicial + 10, yPersonagemInicial + 50, yPersonagemInicial + 15, yPersonagemInicial - 40]
+            
+            antigox1 = background.x
+            antigox2 = background2.x
+
             background = GameImage("assets/sprites/background_fase2.png")
+            background.x = antigox1
             background2 = GameImage("assets/sprites/background_fase2_parallax.png")
+            background2.x = antigox2
             janela.update()
             if config.dif == 1:
                 config.velBackground = 550
@@ -237,6 +242,7 @@ def main():
                 config.velBackground = 600
             elif config.dif == 3:
                 config.velBackground = 750
+            
 
         if fase2 and (obst > 25 or teclado.key_pressed('3')):
             utilidades.win()
@@ -258,7 +264,7 @@ def main():
         escudo.draw()
         vida.draw()
         duplica_coins.draw()
-        if atual == 3 and fase2:
+        if fase2 and atual == 3 and obst > 0:
             obstaculo.update()
         personagem.update()
         janela.update()
