@@ -1,4 +1,5 @@
 import menu
+import  rank
 from PPlay.window import *
 from PPlay.gameimage import *
 from PPlay.sprite import *
@@ -18,13 +19,16 @@ s_pulo = pygame.mixer.Sound("assets/sounds/jump.wav")
 s_colide = pygame.mixer.Sound("assets/sounds/S_colide.wav")
 s_moeda = pygame.mixer.Sound("assets/sounds/S_moeda.wav")
 s_gameOver = pygame.mixer.Sound("assets/sounds/S_gameOver.wav")
+s_win = pygame.mixer.Sound("assets/sounds/win_sound.wav")
 
 # criando canais separados para o fundo e os efeitos (evitando conflito)
 pulo_channel = pygame.mixer.Channel(1)
 moeda_channel = pygame.mixer.Channel(2)
 colide_channel = pygame.mixer.Channel(3)
 fim_channel = pygame.mixer.Channel(4)
+win_channel = pygame.mixer.Channel(5)
 
+controle_ranking=0
 
 def main():
     janela = Window(1024, 682)
@@ -119,9 +123,6 @@ def main():
             else:
                 obstaculo = Sprite(str(listaObstaculos[atual]))
             obstaculo.set_position(janela.width, posicoesObstaculos[atual])
-            if fase2 and obst == 0:
-                obstaculo = Sprite(str(listaObstaculos[1]))
-                obstaculo.set_position(janela.width, posicoesObstaculos[1])
             contLooping += 1
             contLoopingEscudo += 1
             obst = obst + 1
@@ -142,7 +143,7 @@ def main():
 
         #MOEDA DUPLICADORA -------------------
         if contMoedas % 7 == 0 and contMoedas != 0:
-            duplica_coins.set_position(janela.width + 70, yPersonagemInicial - 180)
+            duplica_coins.set_position(janela.width + 160, yPersonagemInicial - 180)
 
         contMoedas = utilidades.doubleCoins(duplica_coins, janela, personagem, contMoedas)
 
@@ -178,7 +179,8 @@ def main():
                 colide_channel.play(s_colide)
 
         if config.contVidas == 0:
-            utilidades.gameover()
+            controle_ranking=1
+            rank.main(controle_ranking,config.pontos)
 
         #PULO ---------------------------
         if not pulo and teclado.key_pressed("up") and not(teclado.key_pressed("down")):
@@ -220,9 +222,8 @@ def main():
         if moedaJogo.x < -moedaJogo.width:  # Moeda saiu da tela
             moedaJogo.set_position(-500, -500)
 
-
         ########### PROXIMA FASE:::
-        if not(fase2) and (obst > 2 or teclado.key_pressed('2')):
+        if not(fase2) and (obst > 20 or teclado.key_pressed('2')):
             listaObstaculos = ["assets/sprites/carro.png", "assets/sprites/Bush_18.png", "assets/sprites/cone.png", "assets/sprites/bird.png"]
             fase2 = True
             obst = 0
@@ -245,7 +246,8 @@ def main():
             
 
         if fase2 and (obst > 25 or teclado.key_pressed('3')):
-            utilidades.win()
+            controle_ranking=2
+            rank.main(controle_ranking,config.pontos)
 
         # UPDATES, TEXTO, DRAW ---------
         background.draw()

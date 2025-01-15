@@ -7,17 +7,24 @@ import config
 import random
 import pygame
 import menu
+import os
+import rank
 
 pygame.mixer.init()
 s_pulo = pygame.mixer.Sound("assets/sounds/jump.wav")
 s_colide = pygame.mixer.Sound("assets/sounds/S_colide.wav")
 s_moeda = pygame.mixer.Sound("assets/sounds/S_moeda.wav")
 s_gameOver = pygame.mixer.Sound("assets/sounds/S_gameOver.wav")
+s_win = pygame.mixer.Sound("assets/sounds/win_sound.wav")
 
 pulo_channel = pygame.mixer.Channel(1)
 moeda_channel = pygame.mixer.Channel(2)
 colide_channel = pygame.mixer.Channel(3)
 fim_channel = pygame.mixer.Channel(4)
+win_channel = pygame.mixer.Channel(5)
+
+pygame.font.init()
+custom_font = pygame.font.Font("assets/fonts/PressStart2P-Regular.ttf", 32)
 
 # CONFIGURANDO O ESCUDO -------------------
 def powerUpEscudo(escudo, janela, personagemAndando, invencivel):
@@ -96,8 +103,12 @@ def win():
     janela = Window(1024, 682)
     teclado = Window.get_keyboard()
     mouse = Window.get_mouse()
+
     janela.set_title("VOCE GANHOU!")
     background = GameImage("assets/sprites/background_venceu.png")
+
+    menu.music_channel.stop()
+    win_channel.play(s_win)
 
     buttom_sim = GameImage("assets/buttons/buttom_sim.png")
     buttom_sim.set_position(282,400)
@@ -129,4 +140,38 @@ def win():
         background.draw()
         buttom_s.draw()
         buttom_n.draw()
+        janela.update()
+
+
+def exibir_ranking(janela):
+    ranking = []
+    arquivo = "classifica.txt"
+    teclado = Window.get_keyboard()
+
+    # Lê o arquivo de ranking, se existir
+    if os.path.exists(arquivo):
+        with open(arquivo, "r") as f:
+            for linha in f:
+                dados = linha.strip().split(",")
+                ranking.append((dados[0], int(dados[1])))
+
+    # Ordena o ranking do maior para o menor
+    ranking = sorted(ranking, key=lambda x: x[1], reverse=True)
+
+    # Adiciona a imagem de fundo
+    janela.set_background_color((0, 0, 255))
+    while True:
+
+        # Exibir o ranking na tela
+        #janela.draw_text("Ranking", janela.width / 2 - 50, 50, size=40, color=(255, 255, 255), font_name="Arial",
+                         #bold=True)
+        ranking_nome = custom_font.render("RANKING: ", True, (255, 255, 255))
+        janela.screen.blit(ranking_nome, ((janela.width / 2)-100, 50))
+        y_pos = 150
+        for i, (nome, pontos) in enumerate(ranking[:5]):  # Mostra até os 5 melhores
+            nomes = custom_font.render(f"{i + 1}. {nome}: {pontos} pontos", True, (255, 255, 255))
+            janela.screen.blit(nomes, (150, y_pos))
+            y_pos += 100
+        if teclado.key_pressed("esc"):
+            menu.main()
         janela.update()
